@@ -159,8 +159,21 @@ window.addEventListener('load', function () {
     });
 
     csvBaixar.addEventListener('click', function(_) {
-        var timestamp = csvTimestamp.value,
-            url = `${baseURL}/v1/csv?ts=${timestamp}`;
+        var ts = csvTimestamp.value,
+            curso = document.querySelector('#cursoInput').value,
+            turma = document.querySelector('#turmaInput').value,
+            email = document.querySelector('#emailInput').value,
+            sala = document.querySelector('#salaInput').value;
+
+        var dados = {ts, curso, turma, email, sala},
+            queryParams = [];
+        var url = `${baseURL}/v1/csv?`;
+
+        for (var dado in dados) {
+            queryParams.push(`${dado}=${dados[dado]}`);
+        }
+        url += queryParams.join('&');
+
         console.log("click no botão de baixar csv");
         console.log(url);
 
