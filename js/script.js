@@ -82,15 +82,17 @@ var url = baseURL + endpoint + sizeParam + size + skipParam + skip;
 
 // Window
 window.addEventListener('load', function () {
-    var curso = document.getElementById("cursoInput");
-    var turma = document.getElementById("turmaInput");
-    var email = document.getElementById("emailInput");
-    var sala = document.getElementById("salaInput");
+    var cursoInput = document.getElementById("cursoInput");
+    var turmaInput = document.getElementById("turmaInput");
+    var emailInput = document.getElementById("emailInput");
+    var salaInput = document.getElementById("salaInput");
     var anterior = document.getElementById("anterior");
     var proximo = document.getElementById("proximo");
     var csvData = document.getElementById("csvdatefrom");
     var csvTimestamp = document.getElementById("csvtimestamp");
     var csvBaixar = document.getElementById("csvsubmit");
+    var horaEntrada = document.getElementById('timestart');
+    var horaSaida = document.getElementById('timeend');
 
     // Main page
     getData("init", url);
@@ -113,9 +115,9 @@ window.addEventListener('load', function () {
         getData(null, url);
     });
     // Search
-    curso.addEventListener("keyup", function (event) {
+    cursoInput.addEventListener("keyup", function (event) {
         if (event.keyCode === 13) {
-            endpoint = "/v1/logs/course?id=" + curso.value;
+            endpoint = "/v1/logs/course?id=" + cursoInput.value;
             skip = 0;
             url = baseURL + endpoint + sizeParam + size + skipParam + skip;
             event.preventDefault();
@@ -123,9 +125,9 @@ window.addEventListener('load', function () {
             getData("curso", url);
         }
     });
-    turma.addEventListener("keyup", function (event) {
+    turmaInput.addEventListener("keyup", function (event) {
         if (event.keyCode === 13) {
-            endpoint = "/v1/logs/class?id=" + turma.value;
+            endpoint = "/v1/logs/class?id=" + turmaInput.value;
             skip = 0;
             url = baseURL + endpoint + sizeParam + size + skipParam + skip;
             event.preventDefault();
@@ -133,9 +135,9 @@ window.addEventListener('load', function () {
             getData("turma", url);
         }
     });
-    email.addEventListener("keyup", function (event) {
+    emailInput.addEventListener("keyup", function (event) {
         if (event.keyCode === 13) {
-            endpoint = "/v1/logs/student?email=" + email.value;
+            endpoint = "/v1/logs/student?email=" + emailInput.value;
             skip = 0;
             url = baseURL + endpoint + sizeParam + size + skipParam + skip;
             event.preventDefault();
@@ -143,9 +145,9 @@ window.addEventListener('load', function () {
             getData("email", url);
         }
     });
-    sala.addEventListener("keyup", function (event) {
+    salaInput.addEventListener("keyup", function (event) {
         if (event.keyCode === 13) {
-            endpoint = "/v1/logs/room?id=" + sala.value;
+            endpoint = "/v1/logs/room?id=" + salaInput.value;
             skip = 0;
             url = baseURL + endpoint + sizeParam + size + skipParam + skip;
             event.preventDefault();
@@ -160,12 +162,14 @@ window.addEventListener('load', function () {
 
     csvBaixar.addEventListener('click', function(_) {
         var ts = csvTimestamp.value,
-            curso = document.querySelector('#cursoInput').value,
-            turma = document.querySelector('#turmaInput').value,
-            email = document.querySelector('#emailInput').value,
-            sala = document.querySelector('#salaInput').value;
+            curso = cursoInput.value,
+            turma = turmaInput.value,
+            email = emailInput.value,
+            sala = salaInput.value,
+            t0 = horaEntrada.valueAsNumber || '',
+            t1 = horaSaida.valueAsNumber || '';
 
-        var dados = {ts, curso, turma, email, sala},
+        var dados = {ts, curso, turma, email, sala, t0, t1},
             queryParams = [];
         var url = `${baseURL}/v1/csv?`;
 
